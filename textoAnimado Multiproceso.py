@@ -1,8 +1,8 @@
-
 #Importa módulos para Interfaz Gráfica de usuario (tkinter)
 import tkinter as tk
 from tkinter import ttk
 import time
+import multiprocessing
 
 #Crea la ventana principal
 main_window = tk.Tk()
@@ -33,14 +33,19 @@ def crearAnimacion(a, b, char):
         main_window.update()
 
 #Ejecuta tres animaciones
-crearAnimacion(10,10, 'X')
-crearAnimacion(10,30, 'Y')
-crearAnimacion(10,50, 'Z')
+if __name__ == '__main__':
+    worker_1 = multiprocessing.Process( name='animacion 1',target=crearAnimacion, args=(10,10, 'X'),)
+    worker_2 = multiprocessing.Process( name='animacion 2',target=crearAnimacion, args=(10,30, 'Y'),)
+    worker_3 = multiprocessing.Process( name='animacion 2',target=crearAnimacion, args=(10,50, 'Z'),)
 
+    worker_1.start()
+    worker_2.start()
+    worker_3.start()
 
-# Mantener las siguientes líneas siempre al final del script y en el mismo orden.
-#Coloca la opcion "Salir"
-opcionFinalizar()
+    worker_1.join()
+    worker_2.join()
+    worker_3.join()
+    
+    opcionFinalizar()
 
-#Bucle principal de la ventana
-main_window.mainloop()
+    main_window.mainloop()
